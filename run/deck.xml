@@ -1,0 +1,748 @@
+<construct>
+	<construct_vars>
+
+        <var name="agent_knowledge_network" value="../AT_indexed.csv"/>
+        <var name="agent_group_network" value="../AG_indexed.csv"/>
+        <var name="belief_knowledge_network" value="../TB_indexed.csv"/>
+        <var name="transmission_weight_network" value="../AT_trans_indexed.csv"/>
+
+        <var name="number_of_extra_agents" value="50"/>                
+
+		<var name="param_file_name" value="params.csv"/>
+		<var name="param_name_column" value="0"/>
+		<var name="param_value_column" value="1"/>
+		
+		<var name="num_agents_param_row" value="0"/>
+		<var name="group_count_param_row" value="1"/>
+		<var name="num_facts_param_row" value="2"/>
+		<var name="num_beliefs_param_row" value="3"/>
+		<var name="num_turns_param_row" value="4"/>
+		<var name="interactions_per_turn_param_row" value="5"/>
+		<var name="facts_per_interaction_param_row" value="6"/>
+		<var name="individual_annealing_param_row" value="7"/>
+		<var name="group_annealing_param_row" value="8"/>
+		<var name="group_flip_to_positive_param_row" value="9"/>
+		<var name="group_flip_to_negative_param_row" value="10"/>
+		<var name="agent_bias_param_row" value="11"/>
+		<var name="probability_of_activation_param_row" value="12"/>
+		<var name="individual_memory_rate_param_row" value="13"/>
+		<var name="group_memory_rate_param_row" value="14"/>
+		        
+        <var name="agent_count" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::num_agents_param_row,
+            construct::intvar::param_value_column]"/>
+        
+        <var name="knowledge_count" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::num_facts_param_row,
+            construct::intvar::param_value_column]"/>
+            
+        <var name="belief_count" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::num_beliefs_param_row,
+            construct::intvar::param_value_column]"/>
+                
+        <var name="time_count" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::num_turns_param_row,
+            construct::intvar::param_value_column]"/>
+        
+        <var name="agentgroup_count" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::group_count_param_row,
+            construct::intvar::param_value_column]"/>
+            
+        <var name="interactions_per_turn" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::interactions_per_turn_param_row,
+            construct::intvar::param_value_column]"/>
+            
+        <var name="num_facts_per_interaction" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::facts_per_interaction_param_row,
+            construct::intvar::param_value_column]"/>
+            
+        <var name="individual_annealing_hl" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::individual_annealing_param_row,
+            construct::intvar::param_value_column]"/>
+            
+		<var name="group_annealing_hl" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::group_annealing_param_row,
+            construct::intvar::param_value_column]"/>
+            
+    	<var name="group_flip_to_positive_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::group_flip_to_positive_param_row,
+            construct::intvar::param_value_column]"/>
+			
+		<var name="group_flip_to_negative_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::group_flip_to_negative_param_row,
+            construct::intvar::param_value_column]"/>
+		
+         <var name="agent_flip_to_positive_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::agent_bias_param_row,
+            construct::intvar::param_value_column]"/>
+			
+		<var name="agent_flip_to_negative_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::agent_bias_param_row,
+            construct::intvar::param_value_column]"/>
+            
+        <var name="activation_probability" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::agent_bias_param_row,
+            construct::intvar::param_value_column]"/>
+        
+        <var name="individual_memory_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::individual_memory_rate_param_row,
+            construct::intvar::param_value_column]"/>
+            
+		<var name="group_memory_rate" value="readFromCSVFile[construct::stringvar::param_file_name,
+            construct::intvar::group_memory_rate_param_row,
+            construct::intvar::param_value_column]"/>
+			
+            
+        <var name="agent_list" value="0..construct::intvar::agent_count-1"/>
+	</construct_vars>
+	<construct_parameters>
+			<param name="tm_model" value="multi_level"/>
+			<param name="verbose_initialization" value="false"/>
+
+			<param name="default_agent_type" value="human"/>
+
+			<param name="out_of_sphere_comm_allowed" value="false"/>
+
+ 			<param name="forgetting" value="false" />
+ 			<param name="use_mail" value="false" />
+ 			<param name="belief_model" value="mask_mode" />
+
+ 			<param name="interaction_requirements" value="disable" />
+
+ 			<param name="communicationWeightForBelief" value="0.03" />
+ 			<param name="communicationWeightForBeliefTM" value="0.02" />
+ 			<param name="communicationWeightForFact" value="0.75" />
+ 			<param name="communicationWeightForKnowledgeTM" value="0.2" />
+ 			<param name="thread_count" value="1" />
+
+			<param name="transactive_memory" value="enable"/>
+        
+            <param name="active_models" value="standard interaction model,standard influence model,standard belief model"
+                                        with="delay_interpolation"/>
+        
+			<param name="active_mechanisms" value="none"/>
+				
+			<param name="activation_threshold_agent" value="construct::floatvar::individual_memory_rate"/>
+			<param name="activation_threshold_group" value="construct::floatvar::group_memory_rate"/>
+			
+			<param name="agent_annealing_halflife" value="construct::floatvar::individual_annealing_hl"/>
+			<param name="group_annealing_halflife" value="construct::floatvar::group_annealing_hl"/>
+			
+	</construct_parameters>
+
+	<nodes>
+
+		<nodeclass type="agent_type" id="agent_type">
+			<node id="human" title="human">
+				<properties>
+					<property name="canSendCommunication" value="true"/>
+					<property name="canReceiveCommunication" value="true"/>
+					<property name="canSendKnowledge" value="true"/>
+					<property name="canReceiveKnowledge" value="true"/>
+					<property name="canSendBeliefs" value="true"/>
+					<property name="canReceiveBeliefs" value="true"/>
+					<property name="canSendBeliefsTM" value="true"/>
+					<property name="canReceiveBeliefsTM" value="true"/>
+					<property name="canSendKnowledgeTM" value="true"/>
+					<property name="canReceiveKnowledgeTM" value="true"/>
+					<property name="canSendReferral" value="true"/>
+					<property name="canReceiveReferral" value="true"/>
+					<property name="communicationMechanism" value="direct"/>
+				</properties>
+			</node>
+		</nodeclass>
+
+		<nodeclass type="CommunicationMedium" id="CommunicationMedium">
+			<node id="facetoface" title="facetoface">
+				<properties>
+					<property name="maxMsgComplexity" value="1000"/>
+					<property name="msgCost" value="1.0"/>
+					<property name="maximumPercentLearnable" value="1.0"/>
+					<property name="time_to_live" value="1"/>
+					<property name="time_to_send" value="1"/>
+					<property name="passive" value="0"/>
+				</properties>
+			</node>
+		</nodeclass>
+
+		<nodeclass type="agent" id="agent">
+			<generator type="count">
+			</generator>
+			<properties>
+				<property name="generate_nodeclass" value="true"/>
+				<property name="generator_type" value="count"/>
+				<property name="generator_count" value="construct::intvar::agent_count"/>
+			</properties>
+		</nodeclass>
+
+		<nodeclass type="knowledge" id="knowledge">
+			<generator type="count">
+			</generator>
+			<properties>
+				<property name="generate_nodeclass" value="true"/>
+				<property name="generator_type" value="count"/>
+				<property name="generator_count" value="construct::intvar::knowledge_count"/>
+			</properties>
+		</nodeclass>
+        
+        <nodeclass type="agentgroup" id="agentgroup">
+			<properties>
+				<property name="generate_nodeclass" value="true"/>
+				<property name="generator_type" value="count"/>
+				<property name="generator_count" value="agentgroup_count"/>
+			</properties>
+		</nodeclass>
+        
+        <nodeclass type="timeperiod" id="timeperiod">
+			<properties>
+				<property name="generate_nodeclass" value="true"/>
+				<property name="generator_type" value="count"/>
+				<property name="generator_count" value="time_count"/>
+			</properties>
+		</nodeclass>
+
+
+		<nodeclass type="binarytask" id="binarytask">
+			<node id="t1" title="ttt1" />
+		</nodeclass>
+
+		<nodeclass type="belief" id="belief">
+			<properties>
+				<property name="generate_nodeclass" value="true"/>
+				<property name="generator_type" value="count"/>
+				<property name="generator_count" value="belief_count"/>
+			</properties>
+		</nodeclass>
+
+		<nodeclass type="knowledgegroup" id="knowledgegroup">
+			<node id="FG1" title="FG1"/>
+		</nodeclass>
+
+		<nodeclass type="dummy_nodeclass" id="dummy_nodeclass">
+			<node id="dummy1" title="dummy1"/>
+		</nodeclass>
+
+	</nodes>
+
+	<networks>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="agent message complexity network" link_type="unsigned int" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="construct::intvar::num_facts_per_interaction"/>
+				<param name="max" value="construct::intvar::num_facts_per_interaction"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="agent initiation count network" link_type="int" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="construct::intvar::interactions_per_turn"/>
+				<param name="max" value="construct::intvar::interactions_per_turn"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+        <network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="agent reception count network" link_type="int" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="construct::intvar::interactions_per_turn*2"/>
+				<param name="max" value="construct::intvar::interactions_per_turn*2"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="knowledge" id="knowledge network" link_type="float" network_type="dense">
+            <generator type="csv">
+                <rows first="0" last="nodeclass::agent::count_minus_one" />
+                <cols first="0" last="nodeclass::knowledge::count_minus_one" />
+                <param name="filesystem_path" value="construct::stringvar::agent_knowledge_network" />
+                <param name="skip_first_row" value="true" />
+                <param name="csvrow" value="construct::stringvar::agent_list" />
+                <param name="csvcol" value="0..nodeclass::knowledge::count_minus_one" />
+                <param name="symmetric" value="true" />
+                <param name="load_style" value="sparse_to_dense_convert" />
+            </generator>
+		</network>
+
+        <network src_nodeclass_type="agent" target_nodeclass_type="agent" id="interaction sphere network" link_type="bool" network_type="dense">
+            <generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="constant_value" value="1.0"/>
+				<param name="symmetric_flag" value="true"/>
+			</generator>
+		</network>
+        
+		<network src_nodeclass_type="agent" target_nodeclass_type="agentgroup" id="agent group membership network" link_type="bool" network_type="dense">
+            <!--
+             Read from CSV for normal agents
+             -->
+            <generator type="csv">
+                <rows first="0" last="nodeclass::agent::count_minus_one" />
+                <cols first="0" last="nodeclass::agentgroup::count_minus_one" />
+                <param name="filesystem_path" value="construct::stringvar::agent_group_network" />
+                <param name="skip_first_row" value="true" />
+                <param name="csvrow" value="construct::stringvar::agent_list" />
+                <param name="csvcol" value="0..nodeclass::agentgroup::count_minus_one" />
+                <param name="symmetric" value="true" />
+                <param name="load_style" value="sparse_to_dense_convert" />
+            </generator>
+		</network>
+		
+		
+		<network src_nodeclass_type="agent" target_nodeclass_type="knowledge" id="transmission knowledge weight network" link_type="float" network_type="dense">
+			<generator type="csv">
+                <rows first="0" last="nodeclass::agent::count_minus_one" />
+                <cols first="0" last="nodeclass::knowledge::count_minus_one" />
+                <param name="filesystem_path" value="construct::stringvar::agent_knowledge_network" />
+                <param name="skip_first_row" value="true" />
+                <param name="csvrow" value="construct::stringvar::agent_list" />
+                <param name="csvcol" value="0..nodeclass::knowledge::count_minus_one" />
+                <param name="symmetric" value="true" />
+                <param name="load_style" value="sparse_to_dense_convert" />
+            </generator>>
+		</network>
+        
+        <network src_nodeclass_type="belief" target_nodeclass_type="knowledge" id="belief knowledge weight network" link_type="float" network_type="dense">
+            <generator type="csv">
+                <rows first="0" last="nodeclass::belief::count_minus_one" />
+                <cols first="0" last="nodeclass::knowledge::count_minus_one" />
+                <param name="filesystem_path" value="construct::stringvar::belief_knowledge_network" />
+                <param name="skip_first_row" value="true" />
+                <param name="csvrow" value="0..nodeclass::belief::count_minus_one" />
+                <param name="csvcol" value="0..nodeclass::knowledge::count_minus_one" />
+                <param name="symmetric" value="true" />
+                <param name="load_style" value="sparse_to_dense_convert" />
+            </generator>
+		</network>
+        
+		<network src_nodeclass_type="agent" target_nodeclass_type="belief" id="agent belief network" link_type="float" network_type="dense">
+            <!--
+             Everyone starts out neutral...
+             -->
+            <generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::belief::count_minus_one"/>
+				<param name="constant_value" value="0.0"/>
+				<param name="symmetric_flag" value="true"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="agent active timeperiod network" link_type="bool" network_type="dense">
+
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="constant_value" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+gg
+		</network>
+		
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="beInfluenced network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0001"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="influentialness network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+        
+        <network src_nodeclass_type="agent" target_nodeclass_type="agent" id="access network" link_type="float" network_type="dense">
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="constant_value" value="1.0"/>
+				<param name="symmetric_flag" value="true"/>
+			</generator>
+		</network>
+        
+        <network src_nodeclass_type="agent" target_nodeclass_type="agent" id="interaction network" link_type="bool" network_type="dense">
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="constant_value" value="0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+        
+		<network src_nodeclass_type="agent" target_nodeclass_type="agent" id="interaction probability network" link_type="float" network_type="dense">
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="constant_value" value="0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+
+        <network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="knowledge similarity weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+        
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="knowledge expertise weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+		
+		<network src_nodeclass_type="knowledge" target_nodeclass_type="binarytask" id="binarytask requirement network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<cols first="0" last="nodeclass::binarytask::count_minus_one"/>
+				<param name="mean" value="0.5"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="knowledge" target_nodeclass_type="binarytask" id="binarytask truth network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<cols first="0" last="nodeclass::binarytask::count_minus_one"/>
+				<param name="mean" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="binarytask" id="binarytask assignment network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::binarytask::count_minus_one"/>
+				<param name="mean" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="binarytask similarity weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="knowledge" id="interaction knowledge weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		
+		<network src_nodeclass_type="agent" target_nodeclass_type="agent" id="physical proximity network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="agent" id="social proximity network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="agent" id="sociodemographic proximity network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::agent::count_minus_one"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="physical proximity weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="social proximity weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="sociodemographic proximity weight network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+		
+		<network src_nodeclass_type="knowledge" target_nodeclass_type="knowledgegroup" id="fact group membership network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<cols first="0" last="nodeclass::knowledgegroup::count_minus_one"/>
+				<param name="mean" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+		
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent selective attention effect network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="knowledge" id="knowledge priority network" link_type="unsigned int" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<param name="min" value="1"/>
+				<param name="max" value="1"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="timeperiod" id="dynamic environment reset timeperiods network" link_type="bool" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::timeperiod::count_minus_one"/>
+				<param name="min" value="0"/>
+				<param name="max" value="0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent learning rate network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="knowledge" id="learnable knowledge network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<param name="mean" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent forgetting rate network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent learn by doing rate network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent forgetting mean network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="0.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="agent forgetting variance network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="1.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+				
+		<network src_nodeclass_type="agent" target_nodeclass_type="dummy_nodeclass" id="public message propensity network" link_type="float" network_type="dense">
+			<generator type="randomuniform">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="0"/>
+				<param name="min" value="0.0"/>
+				<param name="max" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+
+		
+	<!--
+		This network determines which agent has access to which mediums.
+		Set access to zero if you do not want the agent to have access to that medium.
+	-->
+		<network src_nodeclass_type="agent" target_nodeclass_type="CommunicationMedium" id="communication medium access network" link_type="float" network_type="dense">
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::CommunicationMedium::count_minus_one"/>
+				<param name="constant_value" value="1"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+		<!--
+			This network shows what medium is prefered when communicating with a
+			given agent.
+
+			This network is actually a 3d network.  It is agent x agent x medium.  One
+			way to view it is a collection of agent x medium networks.  There is one of
+			these agent x medium networks for every agent, so each agent has a custom
+			agent x medium network that shows what mediums he prefers to use when
+			communicating with any given agent.
+		-->
+		<network src_nodeclass_type="agent" target_nodeclass_type="CommunicationMedium" id="communication medium preferences network" link_type="float" network_type="dense">
+			<generator type="constant">
+				<rows first="0" last="nodeclass::agent::count_minus_one"/>
+				<cols first="0" last="nodeclass::CommunicationMedium::count_minus_one"/>
+				<param name="constant_value" value="1"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+	
+		</network>
+
+		<!--
+			This network limits what knowledge a given medium may send by limiting
+			what knowledgegroups the medium may use.
+		-->
+		<network src_nodeclass_type="CommunicationMedium" target_nodeclass_type="knowledgegroup" id="medium knowledgegroup network" link_type="bool" network_type="dense">
+			<generator type="randombinary">
+				<rows first="0" last="nodeclass::CommunicationMedium::count_minus_one"/>
+				<cols first="0" last="nodeclass::knowledgegroup::count_minus_one"/>
+				<param name="mean" value="1.0"/>
+				<param name="symmetric_flag" value="false"/>
+			</generator>
+		</network>
+
+	</networks>
+
+
+
+	<transactivememory>
+		<network id="'knowledge transactive memory network'" ego_nodeclass_type="agent" src_nodeclass_type="agent" target_nodeclass_type="knowledge" link_type="bool" network_type="TMBool" associated_network="knowledge network">
+			<generator type="group_based">
+				<ego first="0" last="nodeclass::agent::count_minus_one"/>
+				<alter first="0" last="nodeclass::agent::count_minus_one"/>
+				<transactive first="0" last="nodeclass::knowledge::count_minus_one"/>
+				<param name="group_flip_to_positive_rate" value="construct::floatvar::group_flip_to_positive_rate"/>
+				<param name="group_flip_to_negative_rate" value="construct::floatvar::group_flip_to_negative_rate"/>
+				<param name="agent_flip_to_positive_rate" value="construct::floatvar::agent_flip_to_positive_rate"/>
+				<param name="agent_flip_to_negative_rate" value="construct::floatvar::agent_flip_to_negative_rate"/>
+				<param name="verbose" value="true"/>
+			</generator>
+		</network>
+	</transactivememory>
+
+
+  <operations>
+      <operation name="ReadGraphByName">
+			<parameters>
+ 				<param name="output_filename" value="knowledge_output.csv"/>
+ 				<param name="output_format" value="csv"/>
+ 				<param name="time" value="2,construct::intvar::time_count-1"/>
+ 				<param name="graph_name" value="'knowledge network'"/>
+ 			</parameters>
+ 	  </operation>
+ 
+	  <operation name="ReadGraphByName">
+		  <parameters>
+			  <param name="output_filename" value="belief_output.csv"/>
+			  <param name="output_format" value="csv"/>
+			  <param name="time" value="2,construct::intvar::time_count-1"/>
+			  <param name="graph_name" value="'agent belief network'"/>
+
+		  </parameters>
+	  </operation>
+
+	  <operation name="ReadGraphByName">
+		 <parameters>
+			  <param name="output_filename" value="prob.csv"/>
+			  <param name="output_format" value="csv"/>
+			  <param name="time" value="2,construct::intvar::time_count-1"/>
+			  <param name="graph_name" value="'interaction probability network'"/>
+		  </parameters>
+	  </operation>
+
+	  <operation name="ActivateAltersForAgents">
+			<parameters>
+				<param name="time" value="1"/>
+				<param name="activation_network_filename" value="../AA_indexed.csv"/>
+				<param name="symmetric_flag" value="true"/>
+				<param name="load_style" value="sparse_to_dense_convert" />
+				<param name="skip_first_row" value="true" />
+				<param name="probability_of_activation" value="construct::floatvar::activation_probability"/>
+			</parameters>
+		</operation>
+		
+ 
+  </operations>
+
+</construct>
+
+
+
+

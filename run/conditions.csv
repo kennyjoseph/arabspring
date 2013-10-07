@@ -1,0 +1,11 @@
+num_turns,30
+interactions_per_turn,2
+facts_per_interaction,2
+individual_annealing,15
+group_annealing,20
+group_flip_to_positive,0,.05
+group_flip_to_negative,0,.05
+agent_bias,.05,.2
+probability_of_activation,.01
+agent_memory_threshold,0
+group_memory_threshold,-5
