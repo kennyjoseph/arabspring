@@ -1,6 +1,13 @@
 Disclaimer
 -------
-The code here was used in the following article
+The code here was used in the following article:
+
+Carley, K.M., Joseph, K., Filonuk, D., Morgan, G., Pfeffer, J. Arab Spring: From News Data to Forecasting. __in submission__.
+
+All code attached was written by me.  
+
+If you use the code, please reference the article if at all appropriate to do so!
+
 
 Data
 -------
