@@ -16,6 +16,7 @@ lower_q <- .25
 upper_q <- .75
 params <- c("date","country","tp","group_flip_to_positive","group_flip_to_negative","agent_bias")
 ###Get results
+######NOTE: the data is too big for github...email me if you're interested!
 d <- fread(paste0(source_dir,"results_sim_final.csv"))
 country_level <- d[,list(Violence=sum(Violence),Revolution=sum(Revolution)),by=params]
 country_level$date <- ymd(country_level$date)
@@ -61,12 +62,13 @@ v_plot <- ggplot(cl, aes(date,value,color=variable))
 v_plot <- v_plot + theme(axis.text.x=element_text(angle=45,hjust=1), legend.title=element_blank()) + xlab("Month")
 v_plot <- v_plot + geom_line(size=1.3,alpha=.7) + facet_wrap(~country,nrow=4,scales="free_y") 
 v_plot <- v_plot + geom_linerange(data=iqr_per_month,aes(y=Median,ymin=Lower,ymax=Upper),color='black')
-v_plot <- v_plot + geom_linerange(data=q, aes(y=med,ymin=low,ymax=high),color='blue')
+v_plot <- v_plot + geom_linerange(data=q, aes(y=med,ymin=low,ymax=high),color='dark grey')
 
-v_plot <- v_plot + geom_point(data=cl[cl$Prediction,],color='red', size=5)
+v_plot <- v_plot + geom_point(data=cl[cl$Prediction,],color='black', size=5)
 v_plot <- v_plot + ylab("Change in Belief (summation over agents)")
 v_plot <- v_plot + scale_x_datetime(breaks=date_breaks("3 months"), 
                                     labels=date_format("%b %Y")) 
+v_plot <- v_plot + scale_color_grey(start=0, end = .6)
 
 res_out <- data.frame(country=unique(cl$country),actual="None",stringsAsFactors=F)
 res_out <- merge(res_out,res,all.x=T)

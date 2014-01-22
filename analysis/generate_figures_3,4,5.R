@@ -2,19 +2,21 @@ library(reshape2)
 library(plyr)
 library(data.table)
 library(ggplot2)
+library(mclust)
 
-top_dir <- "~/Dropbox/Kenny/current_papers/ArabSpring/github/"
-file <- paste0(top_dir,"rev_2011-01/")
+top_dir <- "~/github/"
+
 countries <- read.csv(paste0(top_dir,"gold_topics/countries.txt"),header=FALSE,stringsAsFactors=FALSE)
 westerners <- read.csv(paste0(top_dir,"gold_topics/westerners.csv"),header=FALSE,stringsAsFactors=FALSE)
 source(paste0(top_dir,"setup/data_functions.R"))
 source(paste0(top_dir,"setup/plotting_functions.R"))
 
-TT_net <- read.csv(paste0(file,"/TT.csv"),stringsAsFactors=FALSE)
-AA_net <- read.csv(paste0(file,"/AA.csv"),stringsAsFactors=FALSE)
-AT_net <- read.csv(paste0(file,"/AT.csv"),stringsAsFactors=FALSE)
-CTA_net <- read.csv(paste0(file,"/ATC.csv"),stringsAsFactors=FALSE)
-F1 <- read.csv(paste(file,"/F1.csv",sep=""),stringsAsFactors=FALSE)
+file <- paste0(top_dir,"/data/rev_2011-01/")
+TT_net <- read.csv(paste0(file,"TT.csv"),stringsAsFactors=FALSE)
+AA_net <- read.csv(paste0(file,"AA.csv"),stringsAsFactors=FALSE)
+AT_net <- read.csv(paste0(file,"AT.csv"),stringsAsFactors=FALSE)
+CTA_net <- read.csv(paste0(file,"ATC.csv"),stringsAsFactors=FALSE)
+F1 <- read.csv(paste(file,"F1.csv",sep=""),stringsAsFactors=FALSE)
 names(CTA_net) <- c("Country","Topic","Agent","Weight")
 
 TB_net_data <- get_tb_data(F1,file)
@@ -40,6 +42,7 @@ f1_file <- f1_file[f1_file$Topic !=f1_file$BeliefTopic,]
 topic_distro_plot(c("INTERNET SOCIAL NETWORKING",
                     "FOOD PRICES"),
                     data.frame(f1_file),"WF1") 
+########SAVE AT SIZE 11.5 x 8.5
 
 ###Figure 4
 ggplot(TB_net_data, aes(Revolution,Violence)) + geom_point() 
@@ -75,7 +78,7 @@ z <- merge(data.frame(AT_net), TB_net_data, by.x="Destination",by.y="Topic",all.
 z <- ddply(z, .(Source),summarise,rev = sum(Revolution),viol=sum(Violence))
 d <- merge(z, AC_net, by.x="Source",by.y="Source")
 t <- d[d$Destination=="EGYPT",]
-library(mclust)
+
 clust <- Mclust(t[,c("rev","viol")],2:20)
 f <- data.frame(agent=t$Source,group=paste(t$Destination[1],class=clust$classification))
 t <- merge(t, f, by.x="Source",by.y="agent")

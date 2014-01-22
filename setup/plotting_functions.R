@@ -3,7 +3,7 @@ topic_distro_plot <- function(terms,data,metric="F1"){
   p <- ggplot(data[data$Topic%in%terms,], aes_string(x="BeliefTopic",y=metric,fill="Topic")) + geom_bar(stat="identity",position='dodge')
   p <- p + facet_wrap(Charge~Belief,nrow=2, scales="free_x") + scale_y_continuous(limits=c(0,max(data[data$Topic%in%terms,metric]))) 
   p <- p + theme(axis.text.x=element_text(angle=60,size=12,hjust=1))
-  p + ylab("") + xlab("")
+  p + ylab("") + xlab("") + scale_fill_grey(start = 0, end = .6, labels=c("FOOD PRICES", "INTERNET SOCIAL\nNETWORKING"))
 }
 
 
