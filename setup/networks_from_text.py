@@ -31,7 +31,6 @@ def merge_into(shorter_term,longer_term):
 	if edit_distance <= MIN_EDIT_DISTANCE:
 		return True
 	
-	return False
 	##"Word" edit distance
 	count = 0
 	for term in shorter_term.split(" "):
