@@ -25,8 +25,9 @@ Data
 -------
 The data, unfortunately, could not be released. However, I do provide:
 
--a sample set of the output in data/rev_2011-01/ from after the Meta-network creation has been completed.  This data can be used to run the simulation model.
--the data for table 3 in results_overthrow.csv 
+- a sample set of the output in data/rev_2011-01/ from after the Meta-network creation has been completed.  This data can be used to run the simulation model.
+
+- the data for table 3 in results_overthrow.csv 
 
 
 The simulation results are not available here due to github's file restriction size, but you can find them at the following link:
