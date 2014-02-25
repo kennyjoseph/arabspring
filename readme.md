@@ -2,7 +2,19 @@ Disclaimer
 -------
 The code here was used in the following article:
 
-Carley, K.M., Joseph, K., Filonuk, D., Morgan, G., Pfeffer, J. Arab Spring: From News Data to Forecasting. __in submission__.
+```
+@article{joseph2014arab,
+  title={Arab Spring: from newspaper},
+  author={Joseph, Kenneth and Carley, Kathleen M and Filonuk, David and Morgan, Geoffrey P and Pfeffer, J{\"u}rgen},
+  journal={Social Network Analysis and Mining},
+  volume={4},
+  number={1},
+  pages={1--17},
+  year={2014},
+  publisher={Springer Vienna}
+}
+
+```
 
 All code attached was written by me.  
 
